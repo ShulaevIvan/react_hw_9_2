@@ -83,6 +83,9 @@ input, textarea {
 .post-btn-wrap, .publish-btn-wrap {
   display: flex;
 }
+.post-content {
+  margin-bottom: 20px;
+}
 .post-btn, .publish-btn, .post-btn-wrap a, .publish-btn-wrap a {
   color: white;
   background-color: #4C75A3;
@@ -112,4 +115,21 @@ input, textarea {
   content: '\2716';
   font-size: 18px;
   cursor: pointer;
+}
+.post-controls-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.post-control-edit-btn, .post-control-rm-btn {
+  color: white;
+  background-color: #4C75A3;
+  padding: 5px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+
+}
+.post-control-rm-btn {
+  margin-left: 10px;
+  background-color: lightcoral;
 }

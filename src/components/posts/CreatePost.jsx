@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
     const initialState = {
@@ -7,6 +8,7 @@ const CreatePost = () => {
         inputValid: false,
         data: undefined,
     };
+    const navigate = useNavigate();
     const [postState, setPostState] = useState(initialState);
 
     const publishHandler = () => {
@@ -17,9 +19,16 @@ const CreatePost = () => {
                 inputValid: prevState.inputValid = true,
                 data: {"id": 0, "content": textAreaValue},
             }));
+            setTimeout(() => {
+                navigate('/');
+            }, 100);
         }
-        
     }
+
+    const rmBtnHandler = () => {
+        navigate('/');
+    }
+
     useEffect(()=> {
         if (postState.inputValid) {
             const fetchFunc = async () => {
@@ -37,16 +46,17 @@ const CreatePost = () => {
                 inputValid: prevState.inputValid = false,
             }));
         };
-        
+        // eslint-disable-next-line
     }, [postState.inputValid]);
 
     return (
         <div className="main-container">
-            <span className="close-form-btn"></span>
+            <span className="close-form-btn" onClick={rmBtnHandler}></span>
             <div className="content-add-input-wrap">
                 <textarea ref={postState.tagRef}  />
             </div>
             <div className="btn-container">
+                {/*  eslint-disable-next-line */}
                 <a className="publish-btn" onClick={publishHandler}>Опубликовать</a>
             </div>
         </div>

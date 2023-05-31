@@ -1,14 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { useContext } from "react";
+import { Context } from "../../context";
 import Post from "./Post";
 
 const HomePage = () => {
-    const initialState = {posts: undefined, loading: true};
-    const [postsState, setPostsState] = useState(initialState);
-    
-    useEffect(() => {
+    const context = useContext(Context);
 
+    useEffect(() => {
         const fetchFunc = async () => {
             await fetch(`${process.env.REACT_APP_TEST_URL}posts`, {
                 method: 'GET',
@@ -18,8 +18,8 @@ const HomePage = () => {
             })
             .then((response) => response.ok ? response.json() : new Error('error geting data'))
             .then((dataObj) => {
-                if (dataObj) {
-                    setPostsState(prevState => ({
+                if (dataObj && JSON.stringify(context.state.posts) !== JSON.stringify(dataObj)) {
+                    context.setState(prevState => ({
                         ...prevState,
                         posts: prevState.posts = dataObj,
                         loading: prevState.loading = false,
@@ -31,10 +31,10 @@ const HomePage = () => {
     });
 
     useEffect(() => {
-        if (!postsState.loading) {
-            console.log(postsState.posts)
+        if (!context.state.loading) {
+            // console.log(context.state.posts)
         }
-    }, [postsState.loading])
+    }, [context.state.loading]);
 
     return (
         <div className="main-container">
@@ -44,7 +44,13 @@ const HomePage = () => {
                 </div>
             </div>
             <div className="posts-wrapper">
-                <Post></Post>
+                {context.state.posts.map((item) => {
+                    return (
+                        <React.Fragment key={item.id}>
+                            <Post postData={item}></Post>
+                        </React.Fragment>
+                    );
+                })}
             </div>
         </div>
     );
