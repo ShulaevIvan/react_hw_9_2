@@ -1,3 +1,7 @@
+.App {
+  margin-left: 5%;
+  margin-top: 5%;
+}
 input, textarea {
   all: 'unset'
 }
@@ -63,7 +67,7 @@ input, textarea {
   border: 1px solid;
   border-radius: 50%;
 }
-.post-author, .post-createted {
+.post-author, .post-createted, .post-created-edit {
   margin-bottom: 5px;
 }
 .post-createted {
@@ -83,7 +87,13 @@ input, textarea {
 .post-btn-wrap, .publish-btn-wrap {
   display: flex;
 }
-.post-content {
+.post-content-edit-wrap textarea {
+  width: 716px;
+  min-height: 80px;
+  max-width: 750px;
+  margin-bottom: 10px;
+}
+.post-content .post-content-edit-wrap {
   margin-bottom: 20px;
 }
 .post-btn, .publish-btn, .post-btn-wrap a, .publish-btn-wrap a {
@@ -108,7 +118,7 @@ input, textarea {
   margin-bottom: 20px;
   justify-content: flex-end;
 }
-.close-form-btn::before {
+.close-form-btn::before, .edit-rm-btn::before {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -119,8 +129,9 @@ input, textarea {
 .post-controls-wrapper {
   display: flex;
   justify-content: flex-end;
+  max-width: 700px;
 }
-.post-control-edit-btn, .post-control-rm-btn {
+.post-control-edit-btn, .post-control-rm-btn, .post-control-edit-save {
   color: white;
   background-color: #4C75A3;
   padding: 5px 10px;
@@ -132,4 +143,8 @@ input, textarea {
 .post-control-rm-btn {
   margin-left: 10px;
   background-color: lightcoral;
+}
+.post-edit-title {
+  position: relative;
+  margin-bottom: 10px;
 }
