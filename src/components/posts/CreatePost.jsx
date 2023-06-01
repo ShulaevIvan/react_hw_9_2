@@ -27,7 +27,7 @@ const CreatePost = () => {
 
     const rmBtnHandler = () => {
         navigate('/');
-    }
+    };
 
     useEffect(()=> {
         if (postState.inputValid) {
@@ -37,7 +37,7 @@ const CreatePost = () => {
                     body: JSON.stringify(postState.data),
                 })
                 .then(() => {
-                    postState.tagRef.current.value = '';
+                    if (postState.tagRef.current) postState.tagRef.current.value = '';
                 })
             };
             fetchFunc();
@@ -51,7 +51,10 @@ const CreatePost = () => {
 
     return (
         <div className="main-container">
-            <span className="close-form-btn" onClick={rmBtnHandler}></span>
+            <div className="post-edit-title">
+                <h4>Создать пост</h4>
+                <span className="close-form-btn" onClick={rmBtnHandler}></span>
+            </div>
             <div className="content-add-input-wrap">
                 <textarea ref={postState.tagRef}  />
             </div>

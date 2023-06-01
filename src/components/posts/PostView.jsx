@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext, useRef, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Context } from "../../context";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -12,7 +12,7 @@ const PostView = () => {
         editMode: false, 
         postId: undefined,
         postDate: undefined,
-        editTextAreaRef: useRef()
+        editTextAreaRef: useRef(),
     };
     const [viewState, setViewState] = useState(initialState);
     const param = useParams();
@@ -43,6 +43,7 @@ const PostView = () => {
             ...prevState,
             postId: prevState.postId = targetPost.id,
             editMode: prevState.editMode = true,
+            post: targetPost,
         }));
     };
 
@@ -50,7 +51,22 @@ const PostView = () => {
         setViewState(prevState => ({
             ...prevState,
             editMode: prevState.editMode = false,
+            post: {
+                ...prevState.post,
+                content: prevState.post.content = viewState.editTextAreaRef.current.value,
+                // created: prevState.post.created = new Date(),
+            }
         }));
+        const fetchFunc = async () => {
+            await fetch(`${process.env.REACT_APP_TEST_URL}posts/${targetPost.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(viewState.post),
+            });
+        }
+        fetchFunc();
     };
 
     const cancelBtnHandler = () => {
@@ -60,10 +76,17 @@ const PostView = () => {
         }));
         navigate(`/posts/${targetPost.id}`);
     }
+    const toMainPage = () => {
+        setTimeout(() => {
+            navigate(`/`);
+        }, 100)
+    }
 
     useEffect(() => {
         if (viewState.editMode) viewState.editTextAreaRef.current.value = targetPost.content;
-    }, [viewState.editMode])
+        // eslint-disable-next-line
+    }, [viewState.editMode]);
+
 
     if (viewState.editMode) {
         return (
@@ -77,7 +100,7 @@ const PostView = () => {
                         <div className="post-author-img"><img src="https://imgholder.ru/50x50/8493a8/adb9ca&text=IMAGE+HOLDER&font=kelson" alt="#" /></div>
                         <div className="post-autgor-name">
                             <span className="post-author">Author</span>
-                            <span className="post-createted">{targetPost ? moment(targetPost.created).fromNow() : null}</span>
+                            <span className="post-createted">{targetPost ? moment(viewState.post.created).fromNow() : null}</span>
                         </div>
                     </div>
                 </div>
@@ -85,7 +108,7 @@ const PostView = () => {
                     <textarea className="post-content-edit" ref={viewState.editTextAreaRef} />
                 </div>
                 <div className="post-controls-wrapper">
-                    <a href="#" className="post-control-edit-save" onClick={savePostHandler}>Сохранить</a>
+                    <Link className="post-control-edit-save" onClick={savePostHandler}>Сохранить</Link>
                 </div>
             </React.Fragment>
         )
@@ -93,6 +116,9 @@ const PostView = () => {
     else {
         return (
             <React.Fragment>
+                <div className="to-mainpage-control">
+                    <Link className="post-control-edit-btn" onClick={toMainPage}>На Главную</Link>
+                </div>
                 <div className="post-wrapper">
                     <div className="post-author-wrapper">
                         <div className="post-author-img"><img src="https://imgholder.ru/50x50/8493a8/adb9ca&text=IMAGE+HOLDER&font=kelson" alt="#" /></div>
@@ -105,8 +131,8 @@ const PostView = () => {
                         {targetPost ? targetPost.content : null}
                     </div>
                     <div className="post-controls-wrapper">
-                        <a href="#" className="post-control-edit-btn" onClick={editPostHandler}>Изменить</a>
-                        <a href="#" className="post-control-rm-btn" onClick={rmPostHandler}>Удалить</a>
+                        <Link className="post-control-edit-btn" onClick={editPostHandler}>Изменить</Link>
+                        <Link className="post-control-rm-btn" onClick={rmPostHandler}>Удалить</Link>
                     </div>
                 </div>
             </React.Fragment>
